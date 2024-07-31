@@ -6,10 +6,24 @@ class Product {
         public size: productSize = '',
     ) {}
 
+    isProductReady(): boolean {
+        for (const key in this) {
+            switch ( typeof this[key] ) {
+                case 'string':
+                    if ( (<string><unknown>this[key]).length <= 0) throw Error('Error: the name must be a string');
+                    break;
+                case 'number':
+                    if ( (<number><unknown>this[key]) <= 0) throw Error('Error: the price must be a a positive number');
+                    break;
+                    default:
+                        throw Error(`${typeof this[key]} is not a valid type`);
+            }
+       }
+       return true;
+    }
+
     toString() {
-        if(this.name.length <=0) throw Error('Error: the name must be a string');
-        if(this.price <=0) throw Error('Error: the price must be a number');
-        if(this.size.length <=0) throw Error('Error: size is empty');
+        if (!this.isProductReady()) return;
 
         return `Product: ${this.name} (price: ${this.price}), size: ${this.size}`;
     }
